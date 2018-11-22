@@ -1,5 +1,9 @@
 const socket = io();
 
+function formatTimestamp(timestamp) {
+  return moment(timestamp).format('HH:mm:ss')
+}
+
 socket.on('connect', function() {
   console.log('Connected to server');
 });
@@ -10,7 +14,7 @@ socket.on('disconnect', function() {
 
 socket.on('newMessage', function(message) {
   const li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`)
+  li.text(`${formatTimestamp(message.createdAt)} ${message.from}> ${message.text}`)
 
   jQuery('#messages').append(li);
 });
@@ -19,7 +23,7 @@ socket.on('newLocationMessage', function(message) {
   const li = jQuery('<li></li>');
   const a = jQuery(`<a target="_blank">My current location</a>`)
   a.attr('href', message.url);
-  li.text(`${message.from}: `);
+  li.text(`${formatTimestamp(message.createdAt)} ${message.from}> `);
   li.append(a);
   jQuery('#messages').append(li);
 });
