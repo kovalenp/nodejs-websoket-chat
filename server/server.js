@@ -39,13 +39,13 @@ io.on('connection', (socket) => {
 
   socket.on('createMessage', (message, callback) => {
     const user = users.getUser(message.from);
-    io.emit('newMessage', generateMessage(user.name, message.text));
+    io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
     callback();
   });
 
   socket.on('createLocationMessage', (location) => {
     const user = users.getUser(socket.id);
-    io.emit('newLocationMessage', generateLocationMessage(user.name, location));
+    io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, location));
   });
 
   socket.on('disconnect', () => {
